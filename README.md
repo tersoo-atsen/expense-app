@@ -1,2 +1,2 @@
 # Expenses App
-Start up project in the solition - Expenses.Api
+Start up project in the solution - Expenses.Api
