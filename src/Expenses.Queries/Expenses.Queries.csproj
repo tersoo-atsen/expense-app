@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Expenses.Data.Access\Expenses.Data.Access.csproj" />
+    <ProjectReference Include="..\Expenses.Data.Models\Expenses.Data.Models.csproj" />
+    <ProjectReference Include="..\Expenses.Common\Expenses.Api.Common.csproj" />
+    <ProjectReference Include="..\Expenses.Api.Models\Expenses.Api.Models.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+</Project>
