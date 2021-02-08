@@ -1,4 +1,4 @@
-namespace Expenses.Data.Model
+namespace Expenses.Data.Models
 {
   public class Role
   {
