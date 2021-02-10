@@ -1,4 +1,5 @@
 using Expenses.Data.Access.DAL;
+using Expenses.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,9 @@ namespace Expenses.IoC
       var connectionString = configuration.GetConnectionString("Default");
 
       services.AddDbContext<ExpensesAppDbContext>(options => options.UseSqlServer(connectionString));
+      services.AddScoped<IUnitOfWork>(ctx => new EFUnitOfWork(ctx.GetRequiredService<ExpensesAppDbContext>()));
+      services.AddScoped<IActionTransactionHelper, ActionTransactionHelper>();
+      services.AddScoped<Api.Filters.UnitOfWorkFilterAttribute>();
     }
   }
 }
