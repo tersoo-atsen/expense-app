@@ -1,5 +1,9 @@
+using System;
 using Expenses.Data.Access.DAL;
 using Expenses.IoC;
+using Expenses.Security.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace Expenses.Api
@@ -30,10 +35,55 @@ namespace Expenses.Api
         loggingBuilder.AddDebug();
       });
       ServiceExtensions.Setup(services, Configuration);
+      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, (o) =>
+                  {
+                    o.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                      IssuerSigningKey = TokenAuthOption.Key,
+                      ValidAudience = TokenAuthOption.Audience,
+                      ValidIssuer = TokenAuthOption.Issuer,
+                      ValidateIssuerSigningKey = true,
+                      ValidateLifetime = true,
+                      ValidateIssuer = true,
+                      ValidateAudience = true,
+                      ClockSkew = TimeSpan.FromMinutes(0)
+                    };
+                  });
+      services.AddAuthorization(auth =>
+      {
+        auth.AddPolicy(JwtBearerDefaults.AuthenticationScheme, new AuthorizationPolicyBuilder()
+                  .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                  .RequireAuthenticatedUser().Build());
+      });
+
       services.AddControllers();
+
       services.AddSwaggerGen(c =>
       {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Expenses.Api", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Expenses.App", Version = "v1" });
+
+        var securitySchema = new OpenApiSecurityScheme
+        {
+          Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+          Name = "Authorization",
+          In = ParameterLocation.Header,
+          Type = SecuritySchemeType.Http,
+          Scheme = "bearer",
+          Reference = new OpenApiReference
+          {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+          }
+        };
+
+        c.AddSecurityDefinition("Bearer", securitySchema);
+
+        var securityRequirement = new OpenApiSecurityRequirement
+        {
+          { securitySchema, new[] { "Bearer" } }
+        };
+
+        c.AddSecurityRequirement(securityRequirement);
       });
     }
 
@@ -42,18 +92,20 @@ namespace Expenses.Api
     {
       InitDatabase(app);
 
+      app.UseAuthentication();
+      
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
+
         app.UseSwagger();
-        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Expenses.Api v1"));
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Expenses.App v1"));
       }
 
       app.UseHttpsRedirection();
 
       app.UseRouting();
 
-      app.UseAuthorization();
 
       app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
