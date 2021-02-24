@@ -93,7 +93,7 @@ namespace Expenses.Api
       InitDatabase(app);
 
       app.UseAuthentication();
-      
+
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
@@ -106,6 +106,7 @@ namespace Expenses.Api
 
       app.UseRouting();
 
+      app.UseAuthorization();
 
       app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
