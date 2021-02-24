@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoQueryable.AspNetCore.Filter" Version="0.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.3" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.2">
@@ -27,6 +29,7 @@
     <ProjectReference Include="..\Expenses.Data.Access\Expenses.Data.Access.csproj" />
     <ProjectReference Include="..\Expenses.Data.Models\Expenses.Data.Models.csproj" />
     <ProjectReference Include="..\Expenses.Security\Expenses.Security.csproj" />
+    <ProjectReference Include="..\Expenses.Queries\Expenses.Queries.csproj" />
   </ItemGroup>
 
 </Project>

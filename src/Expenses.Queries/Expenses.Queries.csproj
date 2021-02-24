@@ -5,6 +5,7 @@
     <ProjectReference Include="..\Expenses.Data.Models\Expenses.Data.Models.csproj" />
     <ProjectReference Include="..\Expenses.Common\Expenses.Api.Common.csproj" />
     <ProjectReference Include="..\Expenses.Api.Models\Expenses.Api.Models.csproj" />
+    <ProjectReference Include="..\Expenses.Security\Expenses.Security.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
