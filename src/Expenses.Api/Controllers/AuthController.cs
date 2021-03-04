@@ -42,7 +42,7 @@ namespace Expenses.Server.RestAPI
       return resultModel;
     }
 
-    [HttpPost("Password")]
+    [HttpPost("Reset")]
     [ValidateModel]
     [Authorize]
     public async Task ChangePassword([FromBody] ChangeUserPasswordModel requestModel)

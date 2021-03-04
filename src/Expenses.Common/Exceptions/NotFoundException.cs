@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Expenses.Common.Exceptions
+namespace Expenses.Api.Common.Exceptions
 {
   public class NotFoundException : Exception
   {

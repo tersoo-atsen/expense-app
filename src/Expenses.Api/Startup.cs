@@ -36,24 +36,24 @@ namespace Expenses.Api
       });
       ServiceExtensions.Setup(services, Configuration);
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, (o) =>
-                  {
-                    o.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                      IssuerSigningKey = TokenAuthOption.Key,
-                      ValidAudience = TokenAuthOption.Audience,
-                      ValidIssuer = TokenAuthOption.Issuer,
-                      ValidateIssuerSigningKey = true,
-                      ValidateLifetime = true,
-                      ValidateIssuer = true,
-                      ValidateAudience = true,
-                      ClockSkew = TimeSpan.FromMinutes(0)
-                    };
-                  });
+      {
+        o.TokenValidationParameters = new TokenValidationParameters()
+        {
+          IssuerSigningKey = TokenAuthOption.Key,
+          ValidAudience = TokenAuthOption.Audience,
+          ValidIssuer = TokenAuthOption.Issuer,
+          ValidateIssuerSigningKey = true,
+          ValidateLifetime = true,
+          ValidateIssuer = true,
+          ValidateAudience = true,
+          ClockSkew = TimeSpan.FromMinutes(0)
+        };
+      });
       services.AddAuthorization(auth =>
       {
         auth.AddPolicy(JwtBearerDefaults.AuthenticationScheme, new AuthorizationPolicyBuilder()
-                  .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                  .RequireAuthenticatedUser().Build());
+          .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+          .RequireAuthenticatedUser().Build());
       });
 
       services.AddControllers();
@@ -90,8 +90,6 @@ namespace Expenses.Api
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      InitDatabase(app);
-
       app.UseAuthentication();
 
       if (env.IsDevelopment())
@@ -109,15 +107,6 @@ namespace Expenses.Api
       app.UseAuthorization();
 
       app.UseEndpoints(endpoints => endpoints.MapControllers());
-    }
-
-    private void InitDatabase(IApplicationBuilder app)
-    {
-      using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-      {
-        var context = serviceScope.ServiceProvider.GetService<ExpensesAppDbContext>();
-        context.Database.Migrate();
-      }
     }
   }
 }

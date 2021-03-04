@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Expenses.Common.Exceptions;
+using Expenses.Api.Common.Exceptions;
 using Expenses.Api.Models.Authenticate;
 using Expenses.Api.Models.Users;
 using Expenses.Data.Access.DAL;

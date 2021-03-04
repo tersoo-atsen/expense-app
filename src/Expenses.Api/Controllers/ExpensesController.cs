@@ -30,11 +30,12 @@ namespace Expenses.Api.Controllers
     }
 
     [HttpGet("{id}")]
-    public ExpenseModel Get(int id)
+    public IActionResult Get(int id)
     {
       var item = _query.Get(id);
+      if (item == null) return NotFound();
       var model = _mapper.Map<ExpenseModel>(item);
-      return model;
+      return Ok(model);
     }
 
     [HttpPost]
@@ -48,11 +49,12 @@ namespace Expenses.Api.Controllers
 
     [HttpPut("{id}")]
     [ValidateModel]
-    public async Task<ExpenseModel> Put(int id, [FromBody] UpdateExpenseModel requestModel)
+    public async Task<IActionResult> Put(int id, [FromBody] UpdateExpenseModel requestModel)
     {
       var item = await _query.Update(id, requestModel);
+      if (item == null) return NotFound();
       var model = _mapper.Map<ExpenseModel>(item);
-      return model;
+      return Ok(model);
     }
 
     [HttpDelete("{id}")]
