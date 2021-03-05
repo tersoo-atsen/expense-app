@@ -5,7 +5,7 @@
 
 ## Dependencies
   - .Net Core
-  - Entity Framework
+  - Entity Framework Core
 
 ## How to install and run
 ```bash
