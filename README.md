@@ -9,7 +9,7 @@
 
 ## How to install and run
 ```bash
-git git@github.com:tersoo-atsen/expense-app.git
+git clone git@github.com:tersoo-atsen/expense-app.git
 cd expenses-app
 dotnet restore
 dotnet build

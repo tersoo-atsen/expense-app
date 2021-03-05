@@ -34,11 +34,15 @@ namespace Expenses.Server.RestAPI
     }
 
     [HttpGet("{id}")]
-    public UserModel Get(int id)
+    public IActionResult Get(int id)
     {
       var item = _query.Get(id);
+      if (item == null)
+      {
+        return NotFound();
+      }
       var model = _mapper.Map<UserModel>(item);
-      return model;
+      return Ok(model);
     }
 
     [HttpPost("{id}/password")]
@@ -50,11 +54,15 @@ namespace Expenses.Server.RestAPI
 
     [HttpPut("{id}")]
     [ValidateModel]
-    public async Task<UserModel> Put(int id, [FromBody] UpdateUserModel requestModel)
+    public async Task<IActionResult> Put(int id, [FromBody] UpdateUserModel requestModel)
     {
       var item = await _query.Update(id, requestModel);
+      if (item == null)
+      {
+        return NotFound();
+      }
       var model = _mapper.Map<UserModel>(item);
-      return model;
+      return Ok(model);
     }
 
     [HttpDelete("{id}")]

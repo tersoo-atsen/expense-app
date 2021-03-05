@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Expenses.Common.Exceptions;
+using Expenses.Api.Common.Exceptions;
 using Expenses.Api.Models.Common;
 using Expenses.Api.Models.Expenses;
 using Expenses.Api.Models.Users;
@@ -46,12 +46,6 @@ namespace Expenses.Queries
     public Expense Get(int id)
     {
       var user = GetQuery().FirstOrDefault(x => x.Id == id);
-
-      if (user == null)
-      {
-        throw new NotFoundException("Expense is not found");
-      }
-
       return user;
     }
 
@@ -76,32 +70,25 @@ namespace Expenses.Queries
     {
       var expense = GetQuery().FirstOrDefault(x => x.Id == id);
 
-      if (expense == null)
+      if (expense != null)
       {
-        throw new NotFoundException("Expense is not found");
+        expense.Amount = model.Amount;
+        expense.Comment = model.Comment;
+        expense.Description = model.Description;
+        expense.Date = model.Date;
+        await _uow.CommitAsync();
       }
-
-      expense.Amount = model.Amount;
-      expense.Comment = model.Comment;
-      expense.Description = model.Description;
-      expense.Date = model.Date;
-
-      await _uow.CommitAsync();
       return expense;
     }
 
     public async Task Delete(int id)
     {
-      var user = GetQuery().FirstOrDefault(u => u.Id == id);
-
-      if (user == null)
+      var expense = GetQuery().FirstOrDefault(u => u.Id == id);
+      if (expense == null)
       {
-        throw new NotFoundException("Expense is not found");
+        throw new NotFoundException("Expense not found");
       }
-
-      if (user.IsDeleted) return;
-
-      user.IsDeleted = true;
+      expense.IsDeleted = true;
       await _uow.CommitAsync();
     }
   }

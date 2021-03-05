@@ -13,7 +13,6 @@ namespace Expenses.Data.Access.DAL
         {
             var assemblyTypes = typeof(UserMap).GetTypeInfo().Assembly.DefinedTypes;
             var mappings = assemblyTypes
-                // ReSharper disable once AssignNullToNotNullAttribute
                 .Where(t => t.Namespace != null && t.Namespace.Contains(typeof(UserMap).Namespace))
                 .Where(t => typeof(IMap).GetTypeInfo().IsAssignableFrom(t));
             mappings = mappings.Where(x => !x.IsAbstract);
